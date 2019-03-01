@@ -1,0 +1,76 @@
+1. Find the albums recorded by the artist Queen.
+
+In [3]: Artist.objects.get(name='Queen')
+Out[3]: <Artist: Artist object (51)>
+
+In [6]: Album.objects.filter(artist_id = 51)
+Out[6]: <QuerySet [<Album: Album object (32)>, <Album: Album object (181)>, <Album: Album object (182)>]>
+
+In [8]: Album.objects.get(pk=32).title
+Out[8]: 'Greatest Hits II'
+
+In [9]: Album.objects.get(pk=181).title
+Out[9]: 'Greatest Hits I'
+
+In [10]: Album.objects.get(pk=182).title
+Out[10]: 'News Of The World'
+
+2. Count how many tracks belong to the media type "Protected MPEG-4 video file".
+
+In [11]: MediaType.objects.filter(name='Protected MPEG-4 video file').count()
+Out[11]: 1
+
+3. Find the genre with the name "Hip Hop/Rap".
+
+In [12]: Genre.objects.get(name='Hip Hop/Rap')
+Out[12]: <Genre: Genre object (17)>
+
+4. Count how many tracks belong to the "Hip Hop/Rap" genre
+
+In [16]: Track.objects.filter(genre_id = 17).count()
+Out[16]: 35
+
+5. Find the total amount of time required to listen to all the tracks in the database.
+
+from django.db.models import Avg, Sum, Max, Min
+In [19]: Track.objects.aggregate(Sum('milliseconds'))
+Out[19]: {'milliseconds__sum': 1377942652}
+
+6. Find the highest price of any track that has the media type "MPEG audio file".
+
+In [3]: MediaType.objects.get(name = 'MPEG audio file')
+Out[3]: <MediaType: MediaType object (1)>
+
+In [7]: Track.objects.filter(media_type = 1).aggregate(Max('unit_price'))
+Out[7]: {'unit_price__max': Decimal('0.99')}
+
+7. Find the name of the most expensive track that has the media type "MPEG audio file".
+
+In [30]: Track.objects.filter(unit_price = 0.99, media_type = 1)
+Out[30]: <QuerySet [<Track: Track object (6)>, <Track: Track object (7)>, <Track: Track object (8)>, <Track: Track object (9)>, <Track: Track object (10)>, <Track: Track object (11)>, <Track: Track object (12)>, <Track: Track object (13)>, <Track: Track object (14)>, <Track: Track object (15)>, <Track: Track object (16)>, <Track: Track object (17)>, <Track: Track object (18)>, <Track: Track object (20)>, <Track: Track object (21)>, <Track: Track object (22)>, <Track: Track object (23)>, <Track: Track object (24)>, <Track: Track object (26)>, <Track: Track object (27)>, '...(remaining elements truncated)...']>
+
+In [31]: Track.objects.get(pk = 6).name
+Out[31]: 'Put The Finger On You'
+
+8. Find the 2 oldest artists.
+
+
+
+9. Find the least expensive track that has the genre "Electronica/Dance".
+
+In [11]: Genre.objects.filter(name = 'Electronica/Dance')
+Out[11]: <QuerySet [<Genre: Genre object (15)>]>
+
+In [13]: Track.objects.filter(genre = 15).aggregate(Min('unit_price'))
+Out[13]: {'unit_price__min': Decimal('0.99')}
+
+In [29]: Track.objects.filter(unit_price = 0.99, genre = 15)
+Out[29]: <QuerySet [<Track: Track object (3319)>, <Track: Track object (3320)>, <Track: Track object (3321)>, <Track: Track object (3322)>, <Track: Track object (3323)>, <Track: Track object (3324)>, <Track: Track object (3325)>, <Track: Track object (3327)>, <Track: Track object (3328)>, <Track: Track object (3329)>, <Track: Track object (3330)>, <Track: Track object (3331)>, <Track: Track object (3333)>, <Track: Track object (3334)>, <Track: Track object (3335)>, <Track: Track object (3352)>, <Track: Track object (3358)>, <Track: Track object (1456)>, <Track: Track object (1463)>, <Track: Track object (1455)>, '...(remaining elements truncated)...']>
+
+In [33]: Track.objects.get(pk = 3319).name
+Out[33]: 'Instinto Colectivo'
+
+10. Find all "MPEG audio file" tracks in the genre "Electronica/Dance".
+
+In [34]: Track.objects.filter(media_type = 1, genre = 15)
+Out[34]: <QuerySet [<Track: Track object (3319)>, <Track: Track object (3320)>, <Track: Track object (3321)>, <Track: Track object (3322)>, <Track: Track object (3323)>, <Track: Track object (3324)>, <Track: Track object (3325)>, <Track: Track object (3327)>, <Track: Track object (3328)>, <Track: Track object (3329)>, <Track: Track object (3330)>, <Track: Track object (3331)>, <Track: Track object (3333)>, <Track: Track object (3334)>, <Track: Track object (3335)>, <Track: Track object (1456)>, <Track: Track object (1463)>, <Track: Track object (1455)>, <Track: Track object (3326)>, <Track: Track object (3332)>, '...(remaining elements truncated)...']>
