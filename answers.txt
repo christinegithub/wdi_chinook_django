@@ -54,7 +54,11 @@ Out[31]: 'Put The Finger On You'
 
 8. Find the 2 oldest artists.
 
+In [40]: Artist.objects.order_by('created_at')[0].name
+Out[40]: 'Les Arts Florissants & William Christie'
 
+In [42]: Artist.objects.order_by('created_at')[1].name
+Out[42]: 'Baby Consuelo'
 
 9. Find the least expensive track that has the genre "Electronica/Dance".
 
